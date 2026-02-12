@@ -26,10 +26,35 @@ const deleteFlowFromDB = async (id: string) => {
     return result;
 };
 
+const duplicateFlowInDB = async (id: string, userId: string) => {
+    const original = await Flow.findById(id);
+    if (!original) return null;
+    const duplicate = await Flow.create({
+        name: `${original.name} (Copy)`,
+        user: userId,
+        nodes: original.nodes,
+        edges: original.edges,
+        isActive: false,
+        version: 1,
+        isDeleted: false,
+    });
+    return duplicate;
+};
+
+const toggleActiveInDB = async (id: string) => {
+    const flow = await Flow.findById(id);
+    if (!flow) return null;
+    flow.isActive = !flow.isActive;
+    await flow.save();
+    return flow;
+};
+
 export const FlowServices = {
     createFlowIntoDB,
     getAllFlowsFromDB,
     getSingleFlowFromDB,
     updateFlowInDB,
     deleteFlowFromDB,
+    duplicateFlowInDB,
+    toggleActiveInDB,
 };

@@ -63,10 +63,37 @@ const deleteFlow = catchAsync(async (req: Request, res: Response) => {
     });
 });
 
+const duplicateFlow = catchAsync(async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const userId = req.user._id;
+    const result = await FlowServices.duplicateFlowInDB(id, userId);
+
+    sendResponse(res, {
+        statusCode: 201,
+        success: true,
+        message: 'Flow duplicated successfully',
+        data: result,
+    });
+});
+
+const toggleActive = catchAsync(async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const result = await FlowServices.toggleActiveInDB(id);
+
+    sendResponse(res, {
+        statusCode: 200,
+        success: true,
+        message: 'Flow status toggled successfully',
+        data: result,
+    });
+});
+
 export const FlowControllers = {
     createFlow,
     getAllFlows,
     getSingleFlow,
     updateFlow,
     deleteFlow,
+    duplicateFlow,
+    toggleActive,
 };
