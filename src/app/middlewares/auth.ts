@@ -153,6 +153,16 @@ const auth = (...allowedRoles: TRole[]) => {
         role: TRole;
       };
 
+      // Handle Superadmin from .env
+      const SUPER_ADMIN_ID = '000000000000000000000001';
+      if (decoded.userId === SUPER_ADMIN_ID && decoded.role === 'superadmin') {
+        req.user = {
+          ...decoded,
+          _id: decoded.userId,
+        };
+        return next();
+      }
+
       const user = await User.findById(decoded.userId);
 
       if (!user) {
