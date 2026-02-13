@@ -12,7 +12,10 @@
             "dest": "src/app.ts"
         },
         {
-            "src": "/",
+            "handle": "filesystem"
+        },
+        {
+            "src": "/(.*)",
             "dest": "src/app.ts"
         }
     ],
