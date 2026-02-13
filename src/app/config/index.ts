@@ -98,4 +98,10 @@ export default {
     publishable_key: process.env.STRIPE_PUBLISHABLE_KEY || '',
     webhook_secret: process.env.STRIPE_WEBHOOK_SECRET || '',
   },
+
+  // ==================== Admin Credentials ====================
+  admin: {
+    email: process.env.ADMIN_EMAIL || process.env.EMAIL || 'admin@gmail.com',
+    password: process.env.ADMIN_PASSWORD || process.env.password || 'admin@gmail.com',
+  },
 };

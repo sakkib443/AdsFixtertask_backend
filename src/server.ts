@@ -29,6 +29,30 @@ async function bootstrap() {
     io.on('connection', (socket) => {
       console.log('User connected:', socket.id);
 
+      const runFlow = async (nodes: any[], edges: any[], startNodeId: string | null, input?: string) => {
+        let currentNode = executeFlowStep(nodes, edges, startNodeId, input);
+
+        while (currentNode) {
+          socket.emit('bot_message', { node: currentNode });
+
+          // If it's an input node, stop and wait for user
+          if (currentNode.type === 'input') break;
+          // If it's an end node, stop
+          if (currentNode.type === 'end') break;
+
+          // If it's a delay node, wait
+          if (currentNode.type === 'delay') {
+            const ms = (currentNode.data?.delay || 2) * 1000;
+            await new Promise(resolve => setTimeout(resolve, ms));
+          }
+
+          // Move to next node
+          const nextNode = executeFlowStep(nodes, edges, currentNode.id);
+          if (nextNode?.id === currentNode.id) break; // Prevent infinite loops
+          currentNode = nextNode;
+        }
+      };
+
       socket.on('start_flow', async (data) => {
         const { flowId, nodes, edges } = data;
         let flowNodes = nodes;
@@ -43,8 +67,7 @@ async function bootstrap() {
         }
 
         if (flowNodes) {
-          const firstNode = executeFlowStep(flowNodes, flowEdges, null);
-          socket.emit('bot_message', { node: firstNode });
+          runFlow(flowNodes, flowEdges, null);
         }
       });
 
@@ -62,8 +85,7 @@ async function bootstrap() {
         }
 
         if (flowNodes) {
-          const nextNode = executeFlowStep(flowNodes, flowEdges, currentNodeId, message);
-          socket.emit('bot_message', { node: nextNode });
+          runFlow(flowNodes, flowEdges, currentNodeId, message);
         }
       });
 

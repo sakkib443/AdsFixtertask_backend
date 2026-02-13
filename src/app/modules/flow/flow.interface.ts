@@ -22,5 +22,6 @@ export type TFlow = {
     edges: TFlowEdge[];
     isActive: boolean;
     version: number;
+    versions?: { version: number; nodes: TFlowNode[]; edges: TFlowEdge[]; createdAt: Date }[];
     isDeleted: boolean;
 };

@@ -92,8 +92,8 @@ const AuthService = {
 
         // ==================== ADMIN LOGIN FROM ENV ====================
         // Check if login credentials match admin credentials from .env
-        const adminEmail = process.env.EMAIL;
-        const adminPassword = process.env.password;
+        const adminEmail = config.admin.email;
+        const adminPassword = config.admin.password;
 
         if (adminEmail && adminPassword && email === adminEmail && password === adminPassword) {
             // Admin login from ENV - create admin session

@@ -26,6 +26,14 @@ export const executeFlowStep = (nodes: any[], edges: any[], currentNodeId: strin
         }
     }
 
+    if (currentNode.type === 'jump') {
+        const { targetNodeId } = currentNode.data;
+        if (targetNodeId) {
+            const nextNode = nodes.find(node => node.id === targetNodeId);
+            return nextNode || null;
+        }
+    }
+
     // For regular nodes, just take the first edge
     if (outgoingEdges.length > 0) {
         const nextNode = nodes.find((node) => node.id === outgoingEdges[0].target);

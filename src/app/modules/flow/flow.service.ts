@@ -17,6 +17,26 @@ const getSingleFlowFromDB = async (id: string) => {
 };
 
 const updateFlowInDB = async (id: string, payload: Partial<TFlow>) => {
+    const current = await Flow.findById(id);
+    if (!current) return null;
+
+    if (payload.nodes || payload.edges) {
+        // Save current as a version snapshot before updating
+        const newVersion = (current.version || 1) + 1;
+        await Flow.findByIdAndUpdate(id, {
+            $push: {
+                versions: {
+                    version: current.version,
+                    nodes: current.nodes,
+                    edges: current.edges,
+                    createdAt: new Date()
+                }
+            },
+            $set: { ...payload, version: newVersion }
+        });
+        return Flow.findById(id);
+    }
+
     const result = await Flow.findByIdAndUpdate(id, payload, { new: true });
     return result;
 };
