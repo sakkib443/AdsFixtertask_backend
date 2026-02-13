@@ -4,7 +4,7 @@ import sendResponse from '../../utils/sendResponse';
 import { FlowServices } from './flow.service';
 
 const createFlow = catchAsync(async (req: Request, res: Response) => {
-    const userId = req.user._id;
+    const userId = (req as any).user?._id;
     const result = await FlowServices.createFlowIntoDB({ ...req.body, user: userId });
 
     sendResponse(res, {
@@ -16,7 +16,7 @@ const createFlow = catchAsync(async (req: Request, res: Response) => {
 });
 
 const getAllFlows = catchAsync(async (req: Request, res: Response) => {
-    const userId = req.user._id;
+    const userId = (req as any).user?._id;
     const result = await FlowServices.getAllFlowsFromDB(userId);
 
     sendResponse(res, {
@@ -65,7 +65,7 @@ const deleteFlow = catchAsync(async (req: Request, res: Response) => {
 
 const duplicateFlow = catchAsync(async (req: Request, res: Response) => {
     const { id } = req.params;
-    const userId = req.user._id;
+    const userId = (req as any).user?._id;
     const result = await FlowServices.duplicateFlowInDB(id, userId);
 
     sendResponse(res, {

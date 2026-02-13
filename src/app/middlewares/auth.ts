@@ -19,7 +19,7 @@ type TRole = 'admin' | 'superadmin' | 'mentor' | 'seller' | 'buyer' | 'user' | '
 declare global {
   namespace Express {
     interface Request {
-      user?: JwtPayload & {
+      user: JwtPayload & {
         _id: string;
         userId: string;
         email: string;
