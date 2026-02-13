@@ -63,7 +63,7 @@ router.patch(
 router.get(
     '/admin/stats',
     authMiddleware,
-    authorizeRoles('admin'),
+    authorizeRoles('admin', 'superadmin'),
     UserController.getUserStats
 );
 
@@ -75,7 +75,7 @@ router.get(
 router.post(
     '/admin/create',
     authMiddleware,
-    authorizeRoles('admin'),
+    authorizeRoles('admin', 'superadmin'),
     UserController.createUser
 );
 
@@ -87,7 +87,7 @@ router.post(
 router.get(
     '/admin/all',
     authMiddleware,
-    authorizeRoles('admin'),
+    authorizeRoles('admin', 'superadmin'),
     validateRequest(userQueryValidation),
     UserController.getAllUsers
 );
@@ -100,7 +100,7 @@ router.get(
 router.get(
     '/admin/:id',
     authMiddleware,
-    authorizeRoles('admin'),
+    authorizeRoles('admin', 'superadmin'),
     UserController.getSingleUser
 );
 
@@ -112,7 +112,7 @@ router.get(
 router.patch(
     '/admin/:id',
     authMiddleware,
-    authorizeRoles('admin'),
+    authorizeRoles('admin', 'superadmin'),
     validateRequest(adminUpdateUserValidation),
     UserController.updateUser
 );
@@ -125,7 +125,7 @@ router.patch(
 router.delete(
     '/admin/:id',
     authMiddleware,
-    authorizeRoles('admin'),
+    authorizeRoles('admin', 'superadmin'),
     UserController.deleteUser
 );
 
