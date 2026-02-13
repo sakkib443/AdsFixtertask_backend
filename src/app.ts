@@ -83,6 +83,16 @@ app.get('/', (req: Request, res: Response) => {
   });
 });
 
+app.get('/api/health', async (req: Request, res: Response) => {
+  const dbStatus = mongoose.connection.readyState === 1 ? 'Connected' : 'Disconnected';
+  res.status(200).json({
+    success: true,
+    database: dbStatus,
+    env: config.env,
+    timestamp: new Date().toISOString(),
+  });
+});
+
 app.use('/api/auth', AuthRoutes);
 app.use('/api/users', UserRoutes);
 app.use('/api/upload', uploadRoutes);
